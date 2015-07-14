@@ -1,0 +1,66 @@
+*** This file describes site map: pages purpose, transitions and cross-referencing.
+*** All pages have header with references to:
+***  Home -> /home
+***  Tests -> /mytests
+***  Moderation (for moderators only) -> /moderation
+***  Administrating (for administrators only) -> /administration
+***  Contacts -> /contacts
+***  Info -> /info
+***  Log in+Sign up or Log out+Profile (depending on anonymity of user)
+***This header references will be omitted.
+
+******************************
+*** 1. Pages with transitions
+/home (interface\onStart.html) - should welcome user and suggest to run some tests.
+    for anonymous users page suggest to select tags and start a test (-> /runtest)
+    for signed users page suggest unfinished tests (-> /runtest) and uncompleted knowledge domains (tags) (-> /tests/generate?{$tag})
+
+*** test related pages
+/mytests (interface\user.html) - for running tests
+    unfinished user's tests (-> /runtest)
+    generating new test (-> /generatetest)
+    review statistics (-> /mystatistics)
+/mystatistics - for viewing user statistics
+/generatetest (test\testGenerator) - for setting up a new test (tags, questions quantity, etc). After hitting 'Start test' button transition to /runtest
+/runtest (test\test) - for running the test. Possibility to delete (terminate the test). Transition to test's results (/testresults).
+/testresults (test\submitedTest) - shows test score.
+
+*** moderating related pages
+/moderation (question\allQuestions) - visible and accessible only for moderators. CRUD for questions.
+    list of tags -> /tags
+    Button for adding new question (-> /question)
+    filters for viewing questions by: all, tags, created, modified, complexity, etc.
+    Questions list. Transition to question's page (-> /question)
+    Button for filling DB with sample data (for testing purposes or something).
+/tags (tag\tags) - CRUD for tags
+    button for adding a tag
+    list of tags -> /tag
+/tag - add, update, delete tag. Also shows related questions with possibility to delete this tag from all related questions
+/question - add, update, delete question including its tags.
+
+*** administrating related pages
+/administration (users\userList) - visible and accessible only for administrators.
+    button for adding a user (-> /user)
+    CRUD for users (shows list of users, -> /user)
+/user (users\editUser) - add, update, disable user.
+
+*** other pages
+/contacts
+/info
+
+*** personal pages
+/signin (signin\signin) - for signing in user. redirects to previous page (preferably) or to /home.
+/signup (signup\signup) - for signing up. redirects to confirmation registration or to wrong registration.
+/myprofile (users\changeUserInfo) editing own info. Transition to changing password
+
+******************************
+2. No transition pages
+error (error\general.html) - server error template
+
+******************************
+3. Temp pages (for testing, some other purposes or maybe just obsolete?)
+home\homeNotSignedIn (obsolete?)
+home\homeSignedIn (obsolete?)
+interface\admin (obsolete?)
+users\personalAccount (obsolete?)
+test\testShow (obsolete?)

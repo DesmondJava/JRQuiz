@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Welcome to the Spring MVC Quickstart application! Get started quickly by signing up!</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen"
+          th:href="@{/resources/css/bootstrap.min.css}"/>
+    <link href="../../../resources/css/jquery.circliful.css" rel="stylesheet" type="text/css" th:href="@{/resources/css/jquery.circliful.css}"/>
+    <link href="../../../resources/css/font-awesome.min.css" rel="stylesheet" type="text/css" th:href="@{/resources/css/font-awesome.min.css}"/>
+    <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}"/>
+    <link href="../../../resources/css/animate.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/animate.min.css}"/>
+    <script src="http://code.jquery.com/jquery-latest.js "></script>
+    <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
+    <script src="../../../resources/js/jquery.circliful.min.js" th:src="@{/resources/js/jquery.circliful.min.js}"></script>
+</head>
+<body>
+
+<div>
+    <div class="section-header">
+        <h2 class="section-title text-center wow fadeInDown animated" style="color: #000000; visibility: visible; -webkit-animation: fadeIn 2000ms;">
+            You have following stat data:
+        </h2>
+    </div>
+    <div id="questionAnswered" class="center" th:attr="data-text =  ${answeredQuestions}, data-info = #{answered.questions}, data-total = ${amountQuestions}, data-part = ${answeredQuestions}" data-dimension="235"  data-width="25" data-fontsize="38" data-fgcolor="#61a9dc" data-bgcolor="#eee" data-fill="#ddd"></div>
+    <div id="pointsGained" class="center" th:attr="data-text =  ${pointsGained}, data-info= #{points.gained}, data-total = ${amountPoints}, data-part = ${pointsGained}" data-startdegree="90" data-dimension="235" data-width="25" data-fontsize="38" data-fgcolor="#dcd261" data-bgcolor="#eee"></div>
+    <div id="averageDifficult" class="center" th:attr="data-text =  ${averageDifficult}, data-info= #{average.difficult}, data-total = #{max.difficult}, data-part = ${averageDifficult}" data-startdegree="10" data-dimension="235" data-width="17" data-fontsize="38" data-fgcolor="#dc616b" data-bgcolor="#eee"></div>
+    <div id="percentageOfCorrectAnswer" class="center" th:attr="data-text =  ${percentageOfCorrectAnswer}  + '%', data-info= #{answers.accuracy}, data-percent= ${percentageOfCorrectAnswer}" data-startdegree="50" data-dimension="235" data-width="25" data-fontsize="38" data-fgcolor="#a9dc61" data-bgcolor="#eee"></div>
+    <div id="passedQuizzes" class="center" th:attr="data-text =  ${passedQuizzes}, data-info= #{passed.quizzes}, data-total = ${amountQuizzes}, data-part = ${passedQuizzes}" data-startdegree="175" data-dimension="235" data-width="25" data-fontsize="38" data-fgcolor="#dc9461" data-bgcolor="#eee"></div>
+</div>
+
+<script>
+    $( document ).ready(function() {
+        $('#questionAnswered').circliful();
+        $('#pointsGained').circliful();
+        $('#averageDifficult').circliful();
+        $('#percentageOfCorrectAnswer').circliful();
+        $('#passedQuizzes').circliful();
+    });
+</script>
+
+<section id="animated-number">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title text-center wow fadeInDown animated" style="color: #000000; visibility: visible; -webkit-animation: fadeIn 2000ms;">
+                You have following stat data:
+            </h2>
+        </div>
+
+        <div class="row text-center">
+            <div class="col-md-2">
+                <div class="zoomIn animated" data-wow-duration="1000ms" data-wow-delay="0ms" style="visibility: visible; -webkit-animation: zoomIn 1000ms 0ms;">
+                    <div class="animated-number" style="color: #3700FF; border: 5px solid #3700FF">
+                        <p th:text="${answeredQuestions}"></p>
+                    </div>
+                    <strong style="color: #3700FF" th:text="#{answered.questions}">QUESTIONS ANSWERED</strong>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="zoomIn animated" data-wow-duration="1000ms" data-wow-delay="100ms" style="visibility: visible; -webkit-animation: zoomIn 1000ms 100ms;">
+                    <div class="animated-number" style="color: #B8B125; border: 5px solid #B8B125">
+                        <p th:text="${pointsGained}"></p>
+                    </div>
+                    <strong style="color: #B8B125" th:text="#{points.gained}">POINTS GAINED</strong>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="zoomIn animated" data-wow-duration="1000ms" data-wow-delay="200ms" style="visibility: visible; -webkit-animation: zoomIn 1000ms 200ms;">
+                    <div class="animated-number" style="color: #F00; border: 5px solid #F00;">
+                        <p th:text="${averageDifficult}"></p>
+                    </div>
+                    <strong style="color: #F00" th:text="#{average.difficult}">AVERAGE DIFFICULTNESS</strong>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="zoomIn animated" data-wow-duration="1000ms" data-wow-delay="300ms" style="visibility: visible; -webkit-animation: zoomIn 1000ms 300ms;">
+                    <div class="animated-number" style="color: #0BA301; border: 5px solid #0BA301">
+                        <p th:text="${percentageOfCorrectAnswer} + '%'"></p>
+                    </div>
+                    <strong style="color: #0BA301" th:text="#{answers.accuracy}">ANSWERS ACCURACY</strong>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="zoomIn animated" data-wow-duration="1000ms" data-wow-delay="400ms" style="visibility: visible; -webkit-animation: zoomIn 1000ms 400ms;">
+                    <div class="animated-number" style="color: #D26C17; border: 5px solid #D26C17">
+                        <p th:text="${passedQuizzes}"></p>
+                    </div>
+                    <strong style="color: #D26C17" th:text="#{passed.quizzes}">TESTS PASSED</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<div th:replace="fragments/header :: header">Header</div>
+
+<p th:text="#{passed.quizzes} + ' ' + ${passedQuizzes}">passed quizzes</p>
+
+<p th:text="#{answered.questions} + ' '+ ${answeredQuestions} + ' (' + ${percentageOfCorrectAnswer}+ '% '+#{correct} +')' ">
+    Answerd Questions</p>
+<br/>
+<br/>
+<p th:text="#{points.gained} + ' ' + ${pointsGained}">points gained</p>
+<p th:text="#{average.difficult} + ' ' + ${averageDifficult}">average difficult</p>
+<br/>
+<br/>
+<h4 th:text="#{byTag}">By Tag</h4>
+<div th:each="tagStatistic : ${tagStatistics}">
+    <br th:text="${tagStatistic.tag.tagName}"/>
+
+    <div class="progress">
+        <div class="progress-bar" role="progressbar" th:text="${tagStatistic.percentageOfPassingByTag()} + '%'"
+             th:attr="aria-valuenow =  ${tagStatistic.percentageOfPassingByTag()}, style = 'width:'+  ${tagStatistic.percentageOfPassingByTag()}+'%;'"
+             aria-valuemin="0" aria-valuemax="100">
+            %
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

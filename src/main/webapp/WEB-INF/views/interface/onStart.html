@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title th:text="#{home.title}">JavaRush quiz</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" type="text/css"
+          th:href="@{/resources/css/bootstrap.min.css}"/>
+    <link href="../../../resources/css/bootstrap-tokenfield.css" rel="stylesheet" type="text/css"
+          th:href="@{/resources/css/bootstrap-tokenfield.css}"/>
+    <link href="../../../resources/css/tokenfield-typeahead.css" rel="stylesheet" type="text/css"
+          th:href="@{/resources/css/tokenfield-typeahead.css}"/>
+    <!--<link href="../../../resources/css/core.css" rel="stylesheet" media="screen"-->
+    <!--th:href="@{/resources/css/core.css}"/>-->
+    <script type="text/javascript" src="../../../resources/js/jquery.min.js"
+            th:src="@{/resources/js/jquery.min.js}"></script>
+    <script type="text/javascript" src="../../../resources/js/bootstrap.min.js"
+            th:src="@{/resources/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" src="../../../resources/js/jquery-ui.min.js"
+            th:src="@{/resources/js/jquery-ui.min.js}"></script>
+    <script type="text/javascript" src="../../../resources/js/bootstrap-tokenfield.min.js"
+            th:src="@{/resources/js/bootstrap-tokenfield.min.js}"></script>
+</head>
+<body>
+
+<div class="well">
+    <div th:replace="fragments/header :: header">Header</div>
+    <br/>
+    <br/>
+
+    <div class="container">
+        <div class="input-group">
+            <span class="input-group-addon" th:text="#{home.tagsSelectorHeader}">Теги</span>
+            <input type="text" class="form-control" id="tokenfield" value="array,loop,threads" autocomplete="on"
+                   tabindex="0"
+                   th:placeholder="#{home.tagsSelectorPlaceholder}" placeholder="Input tags you want"/>
+            <script type="text/javascript">
+                window.name = 0;
+
+                $('#tokenfield').tokenfield({
+                    autocomplete: {
+                        source: ['array', 'loop', 'threads', 'arraylist', 'linkedlist', 'map', 'operators', 'synchrinized', 'catch'],
+                        delay: 100,
+                        messages: {
+                            noResults: '',
+                            results: function () {
+                            }
+                        }
+                    },
+                    showAutocompleteOnFocus: true
+                });
+            </script>
+        </div>
+
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12" align="center">
+                <a class="btn btn-primary" th:text="#{home.generateTestBtnHeader}">Generate test</a>
+            </div>
+        </div>
+
+        <br/>
+        <a class="btn btn-default" href="quiz">Generate Quiz(workaround)</a>
+        <br/>
+    </div>
+
+    <div class="container">
+        <div th:each="aut, iterStat : ${allUncompletedQuizzes}" class="row clearfix"
+             style="border-bottom: 2px solid #000000 ">
+            <div class="col-md-6 column">
+                <h5 th:text="${aut.created}">
+                    creation date
+                </h5>
+
+                <p>
+                    <span th:each="aut : ${aut.tags}" th:text="${aut.tagName}"> tags </span>
+                </p>
+
+            </div>
+            <div class="col-md-6 column">
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar"
+                         th:attr="aria-valuenow = ${progressList[iterStat.index]}, style = 'width:'+ ${progressList[iterStat.index]}+'%;'"
+                         aria-valuemin="0" aria-valuemax="100" th:text="${progressList[iterStat.index]} + '%'">
+
+                    </div>
+                </div>
+                <a th:href="@{'/runquiz/' + ${aut.id}}" class="btn btn-success" th:text="#{finish.quiz}"> </a>
+                <!--<a th:href="@{/uncompletedquizzes/delete(id = ${aut.id})}" class="btn btn-danger"> Delete Test</a> пока не работает -->
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

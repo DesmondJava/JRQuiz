@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <title>Welcome to the Spring MVC Quickstart application! Congrats! You just started!</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen"
+          th:href="@{/resources/css/bootstrap.min.css}"/>
+    <link href="../../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}"/>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script type="text/javascript" src="../../../resources/js/jquery-ui.min.js"
+            th:src="@{/resources/js/jquery-ui.min.js}"></script>
+    <script src="../../../../resources/js/jquery.dataTables.min.js" th:src="@{/resources/js/jquery.dataTables.min.js}"></script>
+    <script src="../../../../resources/js/dataTables.bootstrap.js" th:src="@{/resources/js/dataTables.bootstrap.js}"></script>
+    <script src="../../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script></head>
+<body>
+
+<div th:replace="fragments/header :: header">Header</div>
+
+<div class="container">
+    <a th:if="${forTag == null}" class="btn btn-default" th:href="@{/moderation/questions/add}">Add Question</a>
+    <h4 th:if="${forTag != null}">The number of Associated questions with tag
+        <span th:text="${forTag.tagName} + ' is ' + ${#sets.size(forTag.questions)}">10</span>
+    </h4>
+    <br />
+    <br />
+
+    <div th:if="${forTag == null}" class="row">
+        <div class="col-md-6">
+            <form class="form-search" th:action="@{/moderation/questions/search}" method="post">
+                <label>Find by Title</label><br />
+                <input  type="text" name="searchquestion"  pattern=".{3,}" required="required" title="3 characters minimum" placeholder="Title..."/>
+                <input class="btn btn-default btn-sm" type="submit" value="Search" />
+            </form>
+        </div>
+        <div class="col-md-6">
+            <form class="form-inline" th:action="@{/moderation/questions/tagSearch}" method="post">
+                <label>Find by Tags</label><br />
+                <input id="tagsinput"  type="text" name="searchtag" class="form-control"  pattern=".{3,}" required="required" title="3 characters minimum" placeholder="Tag.."/>
+                <input class="btn btn-default btn-sm" type="submit" value="Search" />
+            </form>
+
+        </div>
+    </div>
+
+    <br />
+    <table id="questiontable" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th class="header_link" th:href="@{/moderation/questions/sort?sortBy=id}">id</th>
+                <th class="header_link" th:href="@{/moderation/questions/sort?sortBy=title}" >Title</th>
+                <th>Text</th>
+                <th class="header_link" th:href="@{/moderation/questions/sort?sortBy=createdBy}" >Created by</th>
+                <th class="header_link" th:href="@{/moderation/questions/sort?sortBy=date}" >Date</th>
+                <th>Tags</th>
+                <th class="header_link" th:href="@{/moderation/questions/sort?sortBy=complexity}">Complexity</th>
+                <th>Enabled</th>
+            </tr>
+
+        </thead>
+        <tbody>
+            <tr th:each="question : ${allQuestions}" class="clickableRow" th:href="@{/moderation/questions/update(id=${question.id})}">
+                <td th:text="${question.id}">Red</td>
+                <td th:text="${question.title}">Orange</td>
+                <td th:utext="${#strings.abbreviate(question.text, 20)}" th:title="${question.text}">Yellow</td>
+                <td th:text="${question.createdBy.userName}">Green</td>
+                <td th:text="${#dates.format(question.createDate, 'dd-MM-yyyy')}" width="100px">Light Blue</td>
+                <td width="20%">
+                    <a th:each="tag : ${question.tags}" th:href="@{/moderation/questions/tag(id=${tag.id})}" th:text="${tag.tagName} + ' '">Blue</a>
+                </td>
+
+                <td width="105px"><!--/*Purple*/-->
+                    <span th:each="star : ${#numbers.sequence(1, question.complexity)}" class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                    <span th:if="${question.complexity &lt; 5}" th:each="star : ${#numbers.sequence(1, 5 - question.complexity)}" class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+                </td>
+
+                <td class="text-center">
+                    <span th:if="${question.active == true}" title="Enabled" class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                    <span th:if="${question.active == false}" title="Disabled" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+<!--/*Navigation*/-->
+    <div th:if="${page} != null" th:fragment="paginationbar">
+        <ul class="pagination">
+            <li th:class="${page.firstPage}? 'disabled' : ''">
+                <span th:if="${page.firstPage}">First</span>
+                <a th:if="${not page.firstPage}" th:href='@{${page.url}(page=0,size=${page.size})}'>First</a>
+            </li>
+            <li th:class="${page.hasPreviousPage}? '' : 'disabled'">
+                <span th:if='${not page.hasPreviousPage}'>&laquo;</span>
+                <a th:if='${page.hasPreviousPage}' th:href='@{${page.url}(page=${page.number-2},size=${page.size})}' title='Go to previous page'>&laquo;</a>
+            </li>
+
+            <li th:each='item : ${page.items}' th:class="${item.current}? 'active' : ''">
+                <span th:if='${item.current}' th:text='${item.number-1}'>1</span>
+                <a th:if='${not item.current}' th:href='@{${page.url}(page=${item.number-1},size=${page.size})}'><span th:text='${item.number-1}'>1</span></a>
+            </li>
+
+            <li th:class="${page.hasNextPage}? '' : 'disabled'">
+                <span th:if='${not page.hasNextPage}'>&raquo;</span>
+                <a th:if='${page.hasNextPage}' th:href='@{${page.url}(page=${page.number},size=${page.size})}' title='Go to next page'>&raquo;</a>
+            </li>
+            <li th:class="${page.lastPage}? 'disabled' : ''">
+                <span th:if='${page.lastPage}'>Last</span>
+                <a th:if='${not page.lastPage}' th:href='@{${page.url}(page=${page.totalPages-1},size=${page.size})}'>Last</a>
+            </li>
+        </ul>
+    </div>
+<!--/* End  of Navigation*/-->
+
+</div>
+
+<script th:inline="javascript">
+    var hrefPathName = window.location.pathname.substr(window.location.pathname.lastIndexOf('/') + 1);
+    jQuery(document).ready(function($) {
+        $(".clickableRow").click(function() {
+            window.document.location = $(this).attr("href");
+        });
+        $("#tagsinput").autocomplete({
+            source: [[${allTagsNames}]],
+            delay: 200
+        });
+
+        if(hrefPathName == "search" || hrefPathName == "tagSearch" || hrefPathName == "tag"){
+            $('.header_link').attr("href", "#");
+            $("#questiontable").dataTable({
+                "info" :false,
+                "searching": false,
+                "lengthChange": false
+            });
+        } else
+        $(".header_link").click(function(){
+            var i = parseInt(window.name);
+            var link;
+            if(i == 0) {
+                link = $(this).attr("href") + "_" + i;
+                window.name = 1;
+            } else if(i == 1){
+                link = $(this).attr("href") + "_" + i;
+                window.name = 0;
+            }
+            $(this).attr("href", link);
+            window.document.location = $(this).attr("href");
+        });
+    });
+</script>
+
+</body>
+</html>

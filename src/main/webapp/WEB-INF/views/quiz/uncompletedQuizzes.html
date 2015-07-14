@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Welcome to the Spring MVC Quickstart application! Get started quickly by signing up!</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen"
+          th:href="@{/resources/css/bootstrap.min.css}"/>
+    <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}"/>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div th:replace="fragments/header :: header">Header</div>
+
+<div class="container">
+    <div th:each="aut, iterStat : ${allUncompletedQuizzes}" class="row clearfix"
+         style="border-bottom: 2px solid #000000 ">
+        <div class="col-md-6 column">
+            <h5 th:text="${aut.created}">
+                creation date
+            </h5>
+
+            <p>
+                <span th:each="aut : ${aut.tags}" th:text="${aut.tagName}"> tags </span>
+            </p>
+
+        </div>
+        <div class="col-md-6 column">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                     th:attr="aria-valuenow = ${progressList[iterStat.index]}, style = 'width:'+ ${progressList[iterStat.index]}+'%;'"
+                     aria-valuemin="0" aria-valuemax="100" th:text="${progressList[iterStat.index]} + '%'">
+
+                </div>
+            </div>
+            <a th:href="@{/runquiz(t = ${aut.id})}" class="btn btn-success"> Finish Quiz</a> <a th:href="@{/uncompletedquizzes/delete(id = ${aut.id})}" class="btn btn-danger"> Delete Test</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

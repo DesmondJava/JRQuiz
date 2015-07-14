@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <title>Welcome to the Spring MVC Quickstart application! Congrats! You just started!</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen"
+          th:href="@{/resources/css/bootstrap.min.css}"/>
+    <link href="../../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}"/>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="../../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
+
+    <!-- include libries(fontawesome) -->
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" />
+
+    <!-- include summernote css/js-->
+    <link href="../../../../resources/css/summernote.css" rel="stylesheet" />
+    <script src="../../../../resources/js/summernote.min.js"></script>
+</head>
+<body>
+
+<div th:replace="fragments/header :: header">Header</div>
+<div class="container">
+    <form action="#" th:action="@{/moderation/questions/addquestion}" th:object="${question}" method="post">
+        <fieldset>
+            <table>
+                <tr>
+                    <td>Title:</td>
+                    <td><input class="form-control" type="text" th:field="*{title}" required="required" placeholder="Question Title"/></td>
+                </tr>
+                <tr>
+                    <td>Text:</td>
+                    <td>
+                        <!--suppress HtmlFormInputWithoutLabel -->
+                        <textarea class="form-control" id="summernote" th:field="*{text}"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Complexity:</td>
+                    <td>
+                        <select class="form-control" th:field="*{complexity}">
+                            <option th:each="com : ${complexity}"
+                                    th:value="${com}"
+                                    th:text="${com}">complexity</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Time to solve:</td>
+                    <td><input type="number" class="form-control" th:field="*{timeToSolve}" min="0" max="100" step="5" required="required" /></td>
+                </tr>
+                <tr>
+                    <td>Type:</td>
+                    <td>
+                        <div data-toggle="buttons" >
+                            <label class="btn btn-default btn-sm">
+                                <input  type="radio" name="type" value="1" required="required" /> MULTIANSWER
+                            </label>
+                            <label class="btn btn-default btn-sm">
+                                <input  type="radio" name="type" value="2" required="required" /> SINGLEANSWER
+                            </label>
+                            <label class="btn btn-default btn-sm">
+                                <input  type="radio" name="type" value="3" required="required"/> TYPEANSWER
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <br />
+            <input class="btn btn-success" type="submit" value="Next"/>
+        </fieldset>
+    </form>
+</div>
+<script>
+    $(document).ready(function() {
+        $('#summernote').summernote({
+            height: 300,                 // set editor height
+            width: 600,                 // set editor width
+
+            minHeight: null,             // set minimum height of editor
+            maxHeight: null             // set maximum height of editor
+        });
+    });
+
+</script>
+
+</body>
+</html>

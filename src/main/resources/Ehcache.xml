@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd">
+       <diskStore path="java.io.tmpdir"/>
+
+       <cache name="questions"
+              eternal="false"
+              timeToLiveSeconds="300"
+              maxElementsInMemory="1000"
+              maxElementsOnDisk="10000"
+              memoryStoreEvictionPolicy="LRU"
+               logging="true"/>
+       <cache name="enabledQuestions"
+              eternal="false"
+              timeToLiveSeconds="300"
+              maxElementsInMemory="1000"
+              maxElementsOnDisk="10000"
+              memoryStoreEvictionPolicy="LRU"
+              logging="true"/>
+
+       <cache name="questionAnswers"
+              eternal="false"
+              timeToLiveSeconds="300"
+              maxElementsInMemory="1000"
+              maxElementsOnDisk="10000"
+              memoryStoreEvictionPolicy="LRU"
+              logging="true"/>
+
+</ehcache>

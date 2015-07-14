@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <title>Welcome to the Spring MVC Quickstart application! Congrats! You just started!</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen"
+          th:href="@{/resources/css/bootstrap.min.css}"/>
+    <link href="../../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}"/>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="../../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
+
+    <!-- include libries(fontawesome) -->
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" />
+
+    <!-- include summernote css/js-->
+    <link href="../../../../resources/css/summernote.css" rel="stylesheet" />
+    <script src="../../../../resources/js/summernote.min.js"></script>
+</head>
+<body>
+
+<div th:replace="fragments/header :: header">Header</div>
+
+<div class="container">
+    <h3>Edit Question</h3>
+    <!--/*Question update form*/-->
+    <form action="#" th:action="@{/moderation/questions/updatequestion(id=${question.id})}" th:object="${question}" method="post">
+        <fieldset>
+            <table>
+                <tr>
+                    <td>Title:</td>
+                    <td><input class="form-control" type="text" th:field="*{title}" required="required" /></td>
+                </tr>
+                <tr>
+                    <td>Text:</td>
+                    <td>
+                        <textarea class="form-control" id="summernote" th:field="*{text}" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Complexity:</td>
+                    <td>
+                        <select class="form-control" th:field="*{complexity}">
+                            <option th:each="com : ${complexity}"
+                                    th:value="${com}"
+                                    th:text="${com}">complexity</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Time to solve::</td>
+                    <td><input type="number" class="form-control" th:field="*{timeToSolve}" min="0" max="100" step="5" required="required" /></td>
+                </tr>
+                <tr>
+                    <td>Type:</td>
+                    <td>
+                        <div data-toggle="buttons" >
+
+                            <label th:if="${question.questionType.toString() == 'MULTIANSWER'}" class="btn btn-default btn-sm btn-info">
+                                <input   type="radio" name="type" value="1" required="required" checked="checked"/> MULTIANSWER
+                            </label>
+                            <label th:unless="${question.questionType.toString() == 'MULTIANSWER'}" class="btn btn-default btn-sm">
+                                <input   type="radio" name="type" value="1" required="required" /> MULTIANSWER
+                            </label>
+
+                            <label th:if="${question.questionType.toString() == 'SINGLEANSWER'}" class="btn btn-default btn-sm btn-info">
+                                <input  type="radio" name="type" value="2" required="required" checked="checked"/> SINGLEANSWER
+                            </label>
+                            <label th:unless="${question.questionType.toString() == 'SINGLEANSWER'}" class="btn btn-default btn-sm">
+                                <input  type="radio" name="type" value="2" required="required" /> SINGLEANSWER
+                            </label>
+
+                            <label th:if="${question.questionType.toString() == 'TYPEANSWER'}" class="btn btn-default btn-sm btn-info">
+                                <input  type="radio" name="type" value="3" required="required" checked="checked" /> TYPEANSWER
+                            </label>
+                            <label th:unless="${question.questionType.toString() == 'TYPEANSWER'}" class="btn btn-default btn-sm">
+                                <input  type="radio" name="type" value="3" required="required" /> TYPEANSWER
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <br />
+            <input class="btn btn-primary" type="submit" value="Update"/>
+
+            <a th:if="${question.active != false}" class="btn btn-success pull-right" th:href="@{/moderation/questions/disable(id=${question.id})}"  >Disable</a>
+            <a th:if="${question.active == false}" class="btn btn-warning pull-right" th:href="@{/moderation/questions/disable(id=${question.id})}"  >Enable</a>
+
+        </fieldset>
+    </form>
+    <hr /><!--/* Answers view & form */-->
+    <h3>Edit Answers</h3>
+    <table class="table">
+        <tr th:each="var : ${answers}">
+            <td th:text="${var.answerText}">text</td>
+            <td th:if="${var.isCorrect} == true">Correct</td>
+            <td th:if="${var.isCorrect} == false"></td>
+            <td><a class="btn btn-danger" th:href="@{deleteanswer(id=${var.id})}" >Delete</a></td>
+        </tr>
+        <tr>
+            <form action="#" th:action="@{/moderation/questions/addanswer(qid=${question.id})}" th:object="${newanswer}" method="post">
+                <td>
+                    <input type="text" class="form-control" th:field="*{answerText}" required="required" placeholder="New Answer" />
+                </td>
+                <td th:if="${iscorrectexists} == true">
+                    <input type="checkbox" th:field="*{isCorrect}" th:value="true" disabled="disabled"/>Correct
+                </td>
+                <td th:if="${iscorrectexists} == false">
+                    <input type="checkbox" th:field="*{isCorrect}" th:value="true"/>Correct
+                </td>
+                <td>
+                    <input class="btn btn-success" type="submit" value="Add"/>
+                </td>
+            </form>
+        </tr>
+    </table>
+    <hr />
+    <h3>Edit Tags</h3>
+    <!--/* Delete tags form */-->
+    <form action="#" th:action="@{/moderation/questions/deletetags(id=${question.id})}"  th:object="${tagnames}" th:method="post">
+        <h4>Choose tags to delete:</h4>
+        <div data-toggle="buttons">
+            <label th:each="var : ${question.tags}" class="btn btn-default btn-xs btn-info">
+                <input  type="checkbox" th:field="*{checkedItems}" th:value="${var.tagName}" th:text="${var.tagName}" />
+            </label>
+        </div>
+        <br />
+        <input class="btn btn-warning" type="submit" value="Delete"/>
+    </form>
+    <!--/* Add tags form */-->
+    <form action="#" th:action="@{/moderation/questions/addtags(id=${question.id})}" th:object="${tagnames}" th:method="post">
+        <h4>Choose tags to add:</h4>
+        <div data-toggle="buttons">
+            <label th:each="var : ${allTags}" class="btn btn-default btn-xs btn-info">
+                <input  type="checkbox" th:field="*{checkedItems}" th:value="${var.tagName}" th:text="${var.tagName}" />
+            </label>
+        </div>
+        <br />
+        <input class="btn btn-success" type="submit" value="Add"/>
+    </form>
+
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#summernote').summernote({
+            height: 300,                 // set editor height
+            width: 600,                 // set editor width
+
+            minHeight: null,             // set minimum height of editor
+            maxHeight: null             // set maximum height of editor
+        });
+    });
+
+</script>
+
+</body>
+</html>

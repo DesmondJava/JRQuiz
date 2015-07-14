@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Welcome to the Spring MVC Quickstart application! Get started quickly by signing up!</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen"
+          th:href="@{/resources/css/bootstrap.min.css}"/>
+    <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}"/>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div th:replace="fragments/header :: header">Header</div>
+
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-md-2 column">
+            <div class="btn-group-vertical">
+                <p th:each="qt,iterStat : ${questionsInQuiz}">
+
+
+                    <a th:href="@{'/runquiz/' + ${tid} +'/' + ${iterStat.count}}"
+                       th:text="#{question.number} + ${iterStat.count}"
+                       th:class="${currentQuestionId != (iterStat.count - 1)} ? (${qt.isAnswered} ? 'btn btn-primary btn-block' : 'btn btn-info btn-block'): 'btn btn-info active'">
+                        Question number</a>
+                </p>
+
+                <a th:href="@{/runquiz/submit}" class="btn btn-warning btn-large">Submit Quiz</a>
+
+            </div>
+        </div>
+        <div class="col-md-6 column">
+            <dl>
+                <dt th:text="${currentQuestion.question.title}">header</dt>
+                <dt th:text="${currentQuestion.question.text}">question</dt>
+
+                <form th:action="@{/runquiz}" th:object="${answerForQuiz}" method="post">
+                    <dd th:each="answer: ${answerForQuiz.answers}">
+                        <!-- <input type="text" th:field="*{inputAnswerValue}"/>-->
+                        <input th:if="${answerForQuiz.questionType.toString() == 'MULTIANSWER'}"
+                               type="checkbox" th:field="*{checkBoxValues}"
+                               th:value="${answer.id}"
+                               th:text="${answer.answerText}"/>
+
+                        <input th:if="${currentQuestion.question.questionType.toString() == 'SINGLEANSWER'}"
+                               type="radio" th:field="*{radioAnswerValue}"
+                               th:value="${answer.id}"
+                               th:text="${answer.answerText}"/>
+                    </dd>
+                    <input type="submit" class="btn btn-large" value="Submit"/>
+                    <a th:if="${(currentQuestionId + 1) != questionsInQuiz.size() }"
+                       th:href="@{'/runquiz/' + ${tid} +'/' + ${currentQuestionId + 2}}"
+                       class="btn btn-info">Next Question</a>
+                </form>
+            </dl>
+        </div>
+
+    </div>
+    <div class="col-md-4 column">
+    </div>
+</div>
+
+</body>
+</html>

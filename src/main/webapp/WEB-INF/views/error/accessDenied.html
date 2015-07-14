@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title th:text="#{home.title}">JavaRush quiz</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" type="text/css"
+          th:href="@{/resources/css/bootstrap.min.css}"/>
+    <link href="../../../resources/css/bootstrap-tokenfield.css" rel="stylesheet" type="text/css"
+          th:href="@{/resources/css/bootstrap-tokenfield.css}"/>
+    <link href="../../../resources/css/tokenfield-typeahead.css" rel="stylesheet" type="text/css"
+          th:href="@{/resources/css/tokenfield-typeahead.css}"/>
+    <!--<link href="../../../resources/css/core.css" rel="stylesheet" media="screen"-->
+    <!--th:href="@{/resources/css/core.css}"/>-->
+    <script type="text/javascript" src="../../../resources/js/jquery.min.js"
+            th:src="@{/resources/js/jquery.min.js}"></script>
+    <script type="text/javascript" src="../../../resources/js/bootstrap.min.js"
+            th:src="@{/resources/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" src="../../../resources/js/jquery-ui.min.js"
+            th:src="@{/resources/js/jquery-ui.min.js}"></script>
+    <script type="text/javascript" src="../../../resources/js/bootstrap-tokenfield.min.js"
+            th:src="@{/resources/js/bootstrap-tokenfield.min.js}"></script>
+</head>
+<body>
+
+<div class="well">
+    <div th:replace="fragments/header :: header">Header</div>
+    <br/>
+    <br/>    
+    <div class="container">
+        <br/>
+        <p>ACCESS DENIED</p>
+        <br/>
+    </div>
+</div>
+
+</body>
+</html>

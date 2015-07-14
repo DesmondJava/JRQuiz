@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen"
+          th:href="@{/resources/css/bootstrap.min.css}"/>
+</head>
+<body>
+<div class="navbar navbar-inverse navbar-fixed-top" th:fragment="header">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#" th:href="@{${homeURL}}" th:text="#{home.projectTitle}">Demo project</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="#tests" th:href="@{${testsURL}}" th:text="#{home.testsBtnHeader}">Tests</a></li>
+<!--                     <li sec:authorize="hasRole('ROLE_ADMIN')" class="dropdown"> -->
+						<li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                           aria-expanded="false" th:text="#{home.adminBtnHeader}">Administration <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li th:each="var : ${adminURLs}"><a th:href="@{${var.value}}" th:text="#{${var.key}}">menu item</a></li>
+                        </ul>
+                    </li>
+<!--                     <li sec:authorize="hasRole('ROLE_MODERATOR')" class="dropdown"> -->
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                           aria-expanded="false" th:text="#{home.moderationBtnHeader}">Moderat <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li th:each="var : ${moderationURLs}"><a th:href="@{${var.value}}" th:text="#{${var.key}}">menu item</a></li>
+                        </ul>
+                    </li>
+                <li><a href="#contact" th:href="@{${statisticsURL}}" th:text="#{home.statisticsBtnHeader}">Contacts</a></li>
+                <li><a href="#about" th:href="@{${infoURL}}" th:text="#{home.infoBtnHeader}">Info</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li th:if="${#authorization.expression('!isAuthenticated()')}">
+                    <a href="/signin" th:href="@{/signin}">Sign in</a>
+                </li>
+                <li th:if="${#authorization.expression('isAuthenticated()')}">
+                    <a href="/logout" th:href="@{#}" onclick="$('#form').submit();">Logout</a>
+
+                    <form style="visibility: hidden" id="form" method="post" action="#" th:action="@{/logout}"></form>
+                </li>
+            </ul>
+        </div>
+        <!--/.nav-collapse -->
+    </div>
+</div>
+</body>
+</html>

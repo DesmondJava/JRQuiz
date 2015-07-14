@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>Welcome to the Spring MVC Quickstart application! Get started quickly by signing up!</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen"
+          th:href="@{/resources/css/bootstrap.min.css}"/>
+    <link href="../../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}"/>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="../../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
+    <script src="../../../../resources/js/jquery.dataTables.min.js" th:src="@{/resources/js/jquery.dataTables.min.js}"></script>
+    <script src="../../../../resources/js/dataTables.bootstrap.js" th:src="@{/resources/js/dataTables.bootstrap.js}"></script>
+    <script>
+       $(document).ready( function () {
+           $('#paginated-table').dataTable({
+               "bSort": false
+           });
+       } );
+    </script>
+</head>
+<body>
+<div th:replace="fragments/header :: header">Header</div>
+<div class="container">
+    <div class="input-group">
+    <!--/*New Tag Form*/-->
+    <form name="input" action="" th:object="${tag}" method="post">
+        <input class="form-control" width="30%" type="text" th:field="*{tagName}" pattern=".{2,}" required="required" title="2 characters minimum"
+               placeholder="New tag name"/>
+        <input class="btn-success" type="submit" value="Add new tag"/>
+        <p th:if="${#fields.hasErrors('tagName')}" th:errors="*{tagName}">Incorrect!</p>
+    </form>
+    </div>
+    <br />
+    <div style="width: 60%">
+        <table id="paginated-table" class="table table-bordered table-striped" >
+            <thead>
+            <tr >
+                <th width="250px">Tag Name</th>
+                <th width="250px">Amount of Questions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each = "tag : ${allTags}">
+                <td>
+                    <!--/*Сам не понимаю как допер до этого. Но я сделал это!!!*/-->
+                    <div class="row">
+                        <div class="col-md-6" th:id="'span-to-hide' + ${tag.id}">
+                            <span th:text="${tag.tagName}" />
+                        </div>
+                        <div class="col-md-6" th:id="'hidden-edit-form' + ${tag.id}" style="display: none">
+                            <form action="/moderation/tags/edit" method="post">
+                                <input type="hidden" name="tid" th:value="${tag.id}" />
+                                <input class="form-control" type="text" name="tagName" th:value="${tag.tagName}"/>
+                            </form>
+                        </div>
+                        <div class="col-md-6">
+                            <a class="btn pull-right" th:onclick="'$(\&#39;#hidden-edit-form' + ${tag.id} + '\&#39;).toggle();
+                                                            $(\&#39;#span-to-hide' + ${tag.id} + '\&#39;).toggle();'">
+                                <span class="glyphicon glyphicon-pencil" aria-hidden="true" title="edit"/>.
+                            </a>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <a class="btn" th:href="@{/moderation/questions/tag(id=${tag.id})}"
+                       th:text="${#sets.size(tag.questions)}" title="Questions"/>
+
+                    <a th:if="${#sets.size(tag.questions) == 0}" class="btn pull-right"
+                       th:href="@{/moderation/tags/delete(id=${tag.id})}">
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true" title="Delete"/>.
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+</body>
+</html>

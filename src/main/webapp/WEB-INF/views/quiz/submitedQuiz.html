@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Welcome to the Spring MVC Quickstart application! Get started quickly by signing up!</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen"
+          th:href="@{/resources/css/bootstrap.min.css}"/>
+    <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}"/>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div th:replace="fragments/header :: header">Header</div>
+
+<div class="container">
+    <div class="row clearfix">
+        <p>Result:</p>
+        <div class="progress">
+            <div th:class="${averageScore > 0} ? (${averageScore > 80} ? 'progress-bar progress-bar-success' : 'progress-bar progress-bar-warning'): 'progress-bar progress-bar-danger'"
+                 role="progressbar"
+                 th:attr="aria-valuenow =  ${averageScore}, style = 'width:'+  ${averageScore}+'%;'"
+                 aria-valuemin="0" aria-valuemax="100" th:text="${averageScore} + '%'">
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<div class="container">
+    <div class="row clearfix">
+
+
+        <div th:each="qt,iterStat : ${questionsInQuiz}"
+             th:class="${qt.score > 0} ? (${qt.score == 100} ? 'alert alert-success' : 'alert alert-warning'): 'alert alert-danger'">
+            <p th:text="${'Score for question - ' + qt.score +'%'}">score</p>
+            <dl>
+                <dt th:text="${qt.question.title}">header</dt>
+                <dt th:text="${qt.question.text}">question</dt>
+
+                <form>
+                    <dd th:each="answer: ${qt.question.answers}">
+                        <input th:if="${qt.question.questionType.toString() == 'MULTIANSWER'}" type="checkbox"
+                               th:text="${answer.answerText}"/>
+                        <input th:if="${qt.question.questionType.toString() == 'SINGLEANSWER'}" type="radio"
+                               th:text="${answer.answerText}"/>
+                        <input th:if="${qt.question.questionType.toString() == 'TYPEANSWER'}" type="text"/>
+                    </dd>
+                </form>
+            </dl>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
